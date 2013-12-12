@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html>
+<body>
+
+<div id="animatedSprite"></div>
+
+<script>
+
+function animatedSprite(id, params) {
+
+	this.el = document.getElementById(id);
+	
+	this.w = params.width;
+	this.h = params.height;
+	this.cols   = params.cols;
+	this.rows   = params.rows;
+	this.image  = params.image;
+	this.interval   = params.interval || 100;
+
+	this.posX = 0;
+	this.posY = 0;
+	
+	this.moveLeft = this.cols != 0 ? this.w/this.cols : 0;
+	this.moveDown = this.rows != 0 ? this.h/this.rows : 0;
+
+	with(this.el){
+		style.width=(w/cols)+"px";
+		style.height=(h/rows)+"px";
+		style.backgroundImage = "url('"+this.image+"')";
+		style.backgroundRepeat = "no-repeat";
+		style.backgroundPosition = "0% 0%";
+	}
+
+	this.animate = function() {
+		this.posX = this.posX-this.moveLeft;
+		if(this.posX <= -this.w) {
+			this.posX = 0;
+			this.posY = this.posY-this.moveDown;
+			if(this.posY <= -this.h) {
+				this.posY = 0;
+			}
+
+		}
+		this.el.style.backgroundPosition = this.posX+"px "+this.posY+"px";	
+	}
+
+	this.init = function() {
+		var obj = this;
+		setInterval(function(){
+			obj.animate();
+		}, obj.interval);
+	}
+	return this;
+}
+
+	animatedSprite("animatedSprite",{
+		width:132,
+		height:70,
+		cols:4,
+		rows:2,
+		image:"spr_banana.png"
+	}).init();
+
+
+</script>
+
+</body>
+</html>
